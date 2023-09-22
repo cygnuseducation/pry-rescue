@@ -18,6 +18,11 @@ class PryRescue
           example.example.instance_variable_set(:@exception, nil)
           example.example_group_instance.instance_variable_set(:@__init_memoized, true)
 
+          if example.example_group_instance.instance_variable_get(:@loaded_fixtures) && [:setup_fixtures, :teardown_fixtures].all? { |m| example.example_group_instance.respond_to?(m) }
+            example.example_group_instance.teardown_fixtures
+            example.example_group_instance.setup_fixtures
+          end
+
           example.run
 
           # Rescued will be called in :after hook, which is ran before the second
